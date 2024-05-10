@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const gameSequence = ['a-2', 'a-3', 'a-4', 'b-1', 'b-2', 'b-3', 'b-4']
-    let gameComplete = false
+    const puzzleSolution = ['a-2', 'a-3', 'a-4', 'b-1', 'b-2', 'b-3', 'b-4']
+    let puzzleSolved = false
 
     /* --- Sliding Puzzle --- */
     const tiles = Array.from(document.querySelectorAll('.tiles .tile'))
     let gridAreas = tiles.map(el => el.dataset.area)
     let gridOptions = ['a-1', 'a-2', 'a-3', 'a-4', 'b-1', 'b-2', 'b-3', 'b-4']
-    let emptyCell = gridOptions.find((el) => !gridAreas.includes(el))
-    updateAnimations(emptyCell)
+    let emptyCell = gridOptions.find(el => !gridAreas.includes(el))
+    resetAnimations(emptyCell)
 
     tiles.forEach( elem => {
         elem.addEventListener('click', e => {
 
-            if (gameComplete) {
+            if (puzzleSolved) {
                 return 
             }
 
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dragCol = parseInt(dragCol)
             emptyCol = parseInt(emptyCol)
 
-            // these conditions determine if the dragged
+            // these conditions determine if the clicked
             // tile can be moved into the empty space
             let sameRow = (dragRow == emptyRow)
             let sameCol = (dragCol == emptyCol)
@@ -37,19 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     elem.classList.remove('animating')
                     elem.dataset.area = [emptyRow, emptyCol].join('-')
                     emptyCell = [dragRow, dragCol].join('-')
-                    updateAnimations(emptyCell)
-                    compareToSequence()
+                    resetAnimations(emptyCell)
+                    isPuzzleSolved()
                 })
             }
         })
     })
-    function updateAnimations(emptyCell) {
+    // comment
+    function resetAnimations(emptyCell) {
 
         tiles.forEach(el => el.removeAttribute('data-animation'))
+
+        // Exit early without setting animations if game is over
+        if (puzzleSolved) return
 
         let [emptyRow, emptyCol] = emptyCell.split('-')
         emptyCol = parseInt(emptyCol)
 
+        // Assembling all possible adjacent spaces
         let prevCol = (emptyCol - 1)
         let nextCol = (emptyCol + 1)
         let prevRow = String.fromCharCode(emptyRow.charCodeAt() - 1)
@@ -60,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         prevRow = [prevRow, emptyCol].join('-')
         nextRow = [nextRow, emptyCol].join('-')
 
+        // Adding relevant animations to adjacent tiles
         prevCol = document.querySelector(`.tile[data-area="${prevCol}"]`)
         nextCol = document.querySelector(`.tile[data-area="${nextCol}"]`)
         prevRow = document.querySelector(`.tile[data-area="${prevRow}"]`)
@@ -70,14 +76,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (prevRow) prevRow.dataset.animation = 'animate-tile-down'
         if (nextRow) nextRow.dataset.animation = 'animate-tile-up'
     }
-    function compareToSequence() {
+    // comment
+    function isPuzzleSolved() {
         let gridAreas = tiles.map(el => el.dataset.area)
 
-        if (gridAreas.join(' ') == gameSequence.join(' ')) {
+        if (gridAreas.join(' ') == puzzleSolution.join(' ')) {
 
-            if (!gameComplete) {
+            if (!puzzleSolved) {
                 document.querySelector('.emoji .hidden').classList.remove('hidden')
-                gameComplete = true
+                puzzleSolved = true
+
+                let audio = new Audio('./audio/godfather.ogg')
+                audio.play()
             }
         }
     }

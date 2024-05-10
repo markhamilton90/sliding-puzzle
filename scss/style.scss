@@ -36,7 +36,7 @@ body {
 
         width: 100%;
         padding-top: 100%;
-        border: 1px solid #444;
+        border: 1px solid #111;
 
         font-size: 50px;
         font-family: 'Helvetica Neue', sans-serif;
@@ -58,7 +58,7 @@ body {
 
 @for $i from 1 through 8 {
     .tile:nth-child(#{$i}) {
-        background-image: url(../images/#{$i+1}.jpg);
+        background-image: url(../images/#{$i}.jpg);
     }
 }
 
