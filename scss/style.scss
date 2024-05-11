@@ -11,15 +11,35 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     background: #111;
     color: #fff;
-
+    font-family: sans-serif;
     margin: 0;
+}
+
+h1 {
+    animation-name: fadeAway;
+    animation-duration: .35s;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    translate: -50% -45%;
+    z-index: 1;
+
+    font-size: 55px;
+    font-weight: 300;
+    text-align: center;
+    margin: 0;
+
+    @media (max-width: 768px) {
+        font-size: 35px;
+    }
 }
 
 .tiles {
@@ -53,6 +73,12 @@ body {
         &[data-animation] {
             cursor: pointer;
         }
+
+        opacity: 0;
+
+        animation-name: scaleIn;
+        animation-duration: .35s;
+        animation-fill-mode: forwards;
     }
 }
 
@@ -64,9 +90,12 @@ body {
 
 $areas: "a-1", "a-2", "a-3", "a-4", "b-1", "b-2", "b-3", "b-4";
 
-@each $area in $areas {
-    .tile[data-area="#{$area}"] {
-        grid-area: #{$area};
+@for $i from 1 through length($areas) {
+    $a: nth($areas, $i);
+
+    .tile[data-area="#{$a}"] {
+        grid-area: #{$a};
+        animation-delay: #{(.1 * $i) + 2.2}s;
     }
 }
 
@@ -102,5 +131,27 @@ $areas: "a-1", "a-2", "a-3", "a-4", "b-1", "b-2", "b-3", "b-4";
     }
     &[data-animation="animate-tile-right"] {
         left: 100% !important;
+    }
+}
+
+@keyframes fadeAway {
+    0% {
+        opacity: 1;
+        visibility: visible;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        translate: -50% 0%;
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        scale: .8;
+    }
+    100% {
+        scale: 1s;
+        opacity: 1;
     }
 }
