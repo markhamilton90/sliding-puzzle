@@ -18,6 +18,10 @@ body {
     color: #fff;
     font-family: sans-serif;
     margin: 0;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
 }
 
 h1 {
@@ -43,42 +47,30 @@ h1 {
 }
 
 .tiles {
-    max-width: 800px;
-    width: 90%;
+    width: 130vh;
+    max-width: 90%;
     display: grid;
     grid-template-areas: 
             "a-1 a-2 a-3 a-4"
             "b-1 b-2 b-3 b-4";
     .tile {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: 100%;
         padding-top: 100%;
         border: 1px solid #111;
-
-        font-size: 50px;
-        font-family: 'Helvetica Neue', sans-serif;
-        user-select: none;
-
+        background-size: cover;
+        background-repeat: no-repeat;
         position: relative;
         top: 0;
         left: 0;
-
-        background-size: cover;
-        background-repeat: no-repeat;
+        opacity: 0;
+        animation-name: scaleIn;
+        animation-duration: .35s;
+        animation-fill-mode: forwards;
+        pointer-events: none;
 
         // only indicate interaction for tiles that can be manipulated
         &[data-animation] {
             cursor: pointer;
         }
-
-        opacity: 0;
-
-        animation-name: scaleIn;
-        animation-duration: .35s;
-        animation-fill-mode: forwards;
     }
 }
 
@@ -104,15 +96,13 @@ $areas: "a-1", "a-2", "a-3", "a-4", "b-1", "b-2", "b-3", "b-4";
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    user-select: none;
     span {
         position: absolute;
         font-size: 2em;
         transition: 1s;
         opacity: 1;
         &.hidden {
-            pointer-events: none;
             opacity: 0;
         }
     }
@@ -153,5 +143,6 @@ $areas: "a-1", "a-2", "a-3", "a-4", "b-1", "b-2", "b-3", "b-4";
     100% {
         scale: 1s;
         opacity: 1;
+        pointer-events: all;
     }
 }

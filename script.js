@@ -1,13 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const puzzleSolution = ['a-2', 'a-3', 'a-4', 'b-1', 'b-2', 'b-3', 'b-4']
     let puzzleSolved = false
+    const puzzleSolution = ['a-2', 'a-3', 'a-4', 'b-1', 'b-2', 'b-3', 'b-4']
+    const spaces = ['a-1', 'a-2', 'a-3', 'a-4', 'b-1', 'b-2', 'b-3', 'b-4']
 
-    /* --- Sliding Puzzle --- */
-    const tiles = Array.from(document.querySelectorAll('.tiles .tile'))
-    let gridAreas = tiles.map(el => el.dataset.area)
-    let gridOptions = ['a-1', 'a-2', 'a-3', 'a-4', 'b-1', 'b-2', 'b-3', 'b-4']
-    let emptyCell = gridOptions.find(el => !gridAreas.includes(el))
+    const tiles = Array.from(document.querySelectorAll('.tile'))
+    let filledSpaces = tiles.map(el => el.dataset.area)
+    let emptyCell = spaces.find(el => !filledSpaces.includes(el))
     resetAnimations(emptyCell)
 
     tiles.forEach( elem => {
@@ -17,16 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return 
             }
 
-            let [dragRow, dragCol] = e.currentTarget.dataset.area.split('-')
+            let [row, col] = e.currentTarget.dataset.area.split('-')
             let [emptyRow, emptyCol] = emptyCell.split('-')
-            dragCol = parseInt(dragCol)
+            col = parseInt(col)
             emptyCol = parseInt(emptyCol)
 
             // these conditions determine if the clicked
             // tile can be moved into the empty space
-            let sameRow = (dragRow == emptyRow)
-            let sameCol = (dragCol == emptyCol)
-            let adjacentCol = (dragCol == (emptyCol - 1) || dragCol == (emptyCol + 1))
+            let sameRow = (row == emptyRow)
+            let sameCol = (col == emptyCol)
+            let adjacentCol = (col == (emptyCol - 1) || col == (emptyCol + 1))
 
             // if so, reassign the tile to the empty space
             if ((sameRow && adjacentCol) || sameCol) {
@@ -36,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     elem.classList.remove('animating')
                     elem.dataset.area = [emptyRow, emptyCol].join('-')
-                    emptyCell = [dragRow, dragCol].join('-')
+                    emptyCell = [row, col].join('-')
                     resetAnimations(emptyCell)
                     isPuzzleSolved()
                 })
@@ -78,13 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // comment
     function isPuzzleSolved() {
-        let gridAreas = tiles.map(el => el.dataset.area)
+        let tileOrder = tiles.map(el => el.dataset.area)
 
-        if (gridAreas.join(' ') == puzzleSolution.join(' ')) {
-
+        if (tileOrder.join(' ') == puzzleSolution.join(' ')) {
             if (!puzzleSolved) {
-                document.querySelector('.emoji .hidden').classList.remove('hidden')
+
                 puzzleSolved = true
+                document.querySelector('.emoji .hidden').classList.remove('hidden')
 
                 let audio = new Audio('./audio/godfather.ogg')
                 audio.play()
