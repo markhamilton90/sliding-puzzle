@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 puzzleSolved = true
                 document.querySelector('.emoji .hidden').classList.remove('hidden')
 
-                let audio = new Audio('./audio/godfather.ogg')
+                let audio = new Audio('./audio/godfather.mp3')
                 audio.play()
             }
         }
